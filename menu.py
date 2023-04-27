@@ -2,7 +2,6 @@ import os
 from tkinter import *
 from tkinter import filedialog, messagebox
 
-
 class Pantalla_Principal():
     def __init__(self):
         self.filename = None
@@ -45,7 +44,7 @@ class Pantalla_Principal():
         Tk().withdraw()
         try:
             filename = filedialog.askopenfilename(title="Selecciona un documento")
-            with open(filename, encoding='utf-8') as infile:
+            with open(filename) as infile:
                 x = infile.read()
                 self.filename = filename
                 lbNomArch = self.vMain.nametowidget("lbNombre")
@@ -62,7 +61,7 @@ class Pantalla_Principal():
         self.txt_data.insert(END, self.Texto)
         
     def guardarComo(self):
-        n_arch = filedialog.asksaveasfile(title="Guardar archivo como")
+        n_arch = filedialog.asksaveasfile(title="Guardar archivo como", filetypes=[("Text files", "*.txt")])
         if n_arch:
             txt_data = self.vMain.nametowidget("txt_data")
             n_arch.write(txt_data.get('1.0', 'end-1c')) 
@@ -71,7 +70,7 @@ class Pantalla_Principal():
     def guardar(self):
         if self.filename:
             cont = self.vMain.nametowidget("txt_data").get('1.0', END)
-            with open(self.filename, 'w', encoding='utf-8') as outfile:
+            with open(self.filename, 'w') as outfile:
                 outfile.write(cont)
         else:
             print("error")
