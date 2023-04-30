@@ -1,5 +1,4 @@
-from Constantes.Letras import LETTERS, LIMITS, RESERVED_WORDS
-from Prueba.Arch_prueba1 import entrada
+from Constantes.Letras import LETTERS, LIMITS, RESERVED_WORDS, NUMBERS
 from Lexico.Token import Token, TokenType
 from Lexico.ErrorLexico import LexicError
 
@@ -107,7 +106,7 @@ class DFA():
                 self.state = 6
                 self.lexeme += currentCharacter
                 return True
-            if currentCharacter == "“":
+            if currentCharacter == "\"":
                 self.state = 7
                 self.lexeme += currentCharacter
                 return True
@@ -126,7 +125,7 @@ class DFA():
             return error
         
         if self.state == 1:
-            if currentCharacter in LETTERS:
+            if currentCharacter in LETTERS or NUMBERS:
                 self.state = 1
                 self.lexeme += currentCharacter
                 return True
@@ -168,42 +167,75 @@ class DFA():
 
         if self.state == 7:
             if currentCharacter in LETTERS:
-                self.state = 7
+                self.state = 8
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter in NUMBERS:
+                self.state = 8
                 self.lexeme += currentCharacter
                 return True
             
             if currentCharacter == "{":
-                self.state = 7
-                self.lexeme += currentCharacter
-                return True
-            
-            if currentCharacter == "}":
-                self.state = 7
-                self.lexeme += currentCharacter
-                return True
-            
-            if currentCharacter == ",":
-                self.state = 7
-                self.lexeme += currentCharacter
-                return True
-            
-            if currentCharacter == ":":
-                self.state = 7
+                self.state = 19
                 self.lexeme += currentCharacter
                 return True
 
-            if currentCharacter in LIMITS:
-                self.state = 7
+            error = self._generateError("Invalid token")
+            self._resetAutomaton()
+            self.currentIndex += 1
+            self.col += 1
+            return error
+        
+        if self.state == 8:
+            if currentCharacter in LETTERS:
+                self.state = 8
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter in NUMBERS:
+                self.state = 8
                 self.lexeme += currentCharacter
                 return True
             
             if currentCharacter == "\"":
-                self.state = 7
+                self.state = 18
                 self.lexeme += currentCharacter
                 return True
             
-            if currentCharacter == "”":
-                self.state = 8
+            error = self._generateError("Invalid token")
+            self._resetAutomaton()
+            self.currentIndex += 1
+            self.col += 1
+            return error
+        
+        if self.state == 18:
+            self.state = 0
+            return True
+
+        if self.state == 19:
+            if currentCharacter in LETTERS:
+                self.state = 19
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter == "\"":
+                self.state = 19
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter == ":":
+                self.state = 19
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter == ",":
+                self.state = 19
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter == "}":
+                self.state = 20
                 self.lexeme += currentCharacter
                 return True
             
@@ -213,7 +245,24 @@ class DFA():
             self.col += 1
             return error
 
-        if self.state == 8:
+        if self.state == 20:
+            if currentCharacter == "\"":
+                self.state = 21
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter == ",":
+                self.state = 7
+                self.lexeme += currentCharacter
+                return True
+            
+            error = self._generateError("Invalid token")
+            self._resetAutomaton()
+            self.currentIndex += 1
+            self.col += 1
+            return error
+
+        if self.state == 21:
             if currentCharacter in LIMITS:
                 self.state = 0
                 return True
@@ -357,16 +406,20 @@ class DFA():
             token = self._generateToken(TokenType.SEMICOLON)
             self._resetAutomaton()
             return token
-        if self.state == 8:
-            token = self._generateToken(TokenType.STRING)
-            self._resetAutomaton()
-            return token
         if self.state == 13:
             token = self._generateToken(TokenType.COMENTARIO_1LINEA)
             self._resetAutomaton()
             return token
         if self.state == 17:
             token = self._generateToken(TokenType.COMENTARIO_VARIAS_LINEAS)
+            self._resetAutomaton()
+            return token
+        if self.state == 18:
+            token = self._generateToken(TokenType.STRING)
+            self._resetAutomaton()
+            return token
+        if self.state == 21:
+            token = self._generateToken(TokenType.JSON)
             self._resetAutomaton()
             return token
 
@@ -382,5 +435,4 @@ class DFA():
         currentCharacter = self.stringFlow[self.currentIndex]
         self.lexeme += currentCharacter
         return LexicError(self.lexeme, msg, self.row, self.col)
-
 

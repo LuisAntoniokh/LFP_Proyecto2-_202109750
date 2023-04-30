@@ -10,6 +10,7 @@ class TokenType(Enum):
     STRING = auto()
     COMENTARIO_1LINEA = auto()
     COMENTARIO_VARIAS_LINEAS = auto()
+    JSON = auto()
     
 class Token():
     def __init__(self, tokenType: TokenType, lexeme: str = None, row: int = None, col: int = None):

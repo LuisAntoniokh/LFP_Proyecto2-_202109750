@@ -1,6 +1,9 @@
 import os
 from tkinter import *
 from tkinter import filedialog, messagebox
+from Lexico.LexPar import Lexer
+from Tablas.TabErrors import ErrorTable
+from Tablas.TabTokens import TokenTable
 
 class Pantalla_Principal():
     def __init__(self):
@@ -12,7 +15,7 @@ class Pantalla_Principal():
         self.vMain.resizable(False, False)
         self.p1()
         self.vMain.mainloop()
-    
+
     def p1(self):
         self.Texto = ""
 
@@ -48,13 +51,11 @@ class Pantalla_Principal():
                 x = infile.read()
                 self.filename = filename
                 lbNomArch = self.vMain.nametowidget("lbNombre")
+                self.Texto = x.strip()
                 lbNomArch.config(text=os.path.basename(filename))
         except Exception as e:
             print(e)
             return
-        
-        self.Texto = x.strip()
-        #print(self.Texto)
 
         self.txt_data = self.vMain.nametowidget("txt_data")
         self.txt_data.delete(1.0, END)
@@ -94,11 +95,26 @@ class Pantalla_Principal():
         txt_data = self.vMain.nametowidget("txt_data")
         txt_data.delete(1.0, END)
         
-    def pAnalisis():
+    def pAnalisis(self):
         pass
 
-    def pTokens():
-        pass
+    def pTokens(self):
+        try:
+            file = open(self.filename, 'r', encoding="utf-8", errors='ignore')
+            text = file.read()
+            file.close()
+
+            lexer = Lexer(text)
+            tokens = lexer.runLexicAnalysis()
+
+            self.tokenWindow = Toplevel(self.vMain)
+            self.tokenWindow.geometry("1000x900")
+            self.tokenTable = TokenTable(self.tokenWindow)
+            self.tokenTable.table.pack(expand=1, fill=BOTH)
+            self.tokenTable.loadData(tokens)
+
+        except Exception as e:
+            print(e)
 
     def pErrores():
         pass

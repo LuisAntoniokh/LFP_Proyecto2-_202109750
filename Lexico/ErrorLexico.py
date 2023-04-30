@@ -6,4 +6,4 @@ class LexicError():
         self.lexeme = lexeme
 
     def __str__(self):
-        return "LexicError: %s at row %d, column %d" % (self.msg, self.row, self.col)
+        return "LexicError: %s at row %d and column %d" % (self.msg, self.row, self.col)
