@@ -210,11 +210,21 @@ class DFA():
             return error
         
         if self.state == 18:
-            self.state = 0
-            return True
+            if currentCharacter in LIMITS:
+                self.state = 0
+                return True
+            
+            if currentCharacter == ",":
+                self.state = 7
+                return True
 
         if self.state == 19:
             if currentCharacter in LETTERS:
+                self.state = 19
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter in LIMITS:
                 self.state = 19
                 self.lexeme += currentCharacter
                 return True
@@ -296,6 +306,11 @@ class DFA():
                 self.state = 12
                 self.lexeme += currentCharacter
                 return True
+            
+            if currentCharacter in LIMITS:
+                self.state = 12
+                self.lexeme += currentCharacter
+                return True
 
             error = self._generateError("Invalid token")
             self._resetAutomaton()
@@ -305,6 +320,11 @@ class DFA():
         
         if self.state == 12:
             if currentCharacter in LETTERS:
+                self.state = 12
+                self.lexeme += currentCharacter
+                return True
+            
+            if currentCharacter in NUMBERS:
                 self.state = 12
                 self.lexeme += currentCharacter
                 return True
@@ -435,4 +455,3 @@ class DFA():
         currentCharacter = self.stringFlow[self.currentIndex]
         self.lexeme += currentCharacter
         return LexicError(self.lexeme, msg, self.row, self.col)
-
