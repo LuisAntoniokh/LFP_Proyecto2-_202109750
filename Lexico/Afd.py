@@ -215,7 +215,8 @@ class DFA():
                 return True
             
             if currentCharacter == ",":
-                self.state = 7
+                self.state = 0
+                self.lexeme += currentCharacter
                 return True
 
         if self.state == 19:
