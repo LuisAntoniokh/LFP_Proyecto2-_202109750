@@ -5,7 +5,6 @@ Luis Antonio Castro Padilla
 ```
 
 # Tabla de tokens
-```sh
 | Token | Representacion |
 | ------ | ------ |
 | ID  | L+ |
@@ -19,7 +18,7 @@ Luis Antonio Castro Padilla
 | OPEN_MORE_ONE_ROW | /* |
 | CLOSE_MORE_ONE_ROW | */ |
 | JSON | "{}" |
-```
+
 
 # Método del árbol
 
