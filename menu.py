@@ -1,6 +1,7 @@
 import os
 from tkinter import *
 from tkinter import filedialog, messagebox
+from Lexico.Err import Core
 from Lexico.LexPar import Lexer
 from Tablas.TabErrors import ErrorTable
 from Tablas.TabTokens import TokenTable
@@ -116,7 +117,26 @@ class Pantalla_Principal():
         except Exception as e:
             print(e)
 
-    def pErrores():
-        pass
+    def pErrores(self):
+        try:
+            file = open(self.filename, 'r', encoding="utf-8", errors='ignore')
+            text = file.read()
+            file.close()
+
+            lexer = Lexer(text)
+            tokens = lexer.runLexicAnalysis()
+            core = Core()
+            errors = core.getErrors()
+
+            if len(errors) > 0:
+                self.errorWindow = Toplevel(self.vMain)
+                self.errorWindow.geometry("1000x900")
+                self.errorTable = ErrorTable(self.errorWindow)
+                self.errorTable.table.pack(expand=1, fill=BOTH)
+                self.errorTable.loadData(errors)
+                return
+
+        except Exception as e:
+            print(e)
 
 r = Pantalla_Principal()

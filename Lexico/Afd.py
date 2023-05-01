@@ -46,16 +46,29 @@ class DFA():
                 continue
             
             if isinstance(token, Token):
-                if token.tokenType == TokenType.COMENTARIO_1LINEA:
+                if token.tokenType == TokenType.ONE_ROW_COMMENT:
                     self.skipLine = True
+                    # self.col += 1
+                    # self.currentIndex += 1
                     continue
 
-                if token.tokenType == TokenType.COMENTARIO_VARIAS_LINEAS:
+                if token.tokenType == TokenType.OPEN_MORE_ONE_ROW:
+                    self.skipToken = True
+                    # self.col += 1
+                    # self.currentIndex += 1
+                    continue
+
+                if token.tokenType == TokenType.CLOSE_MORE_ONE_ROW:
                     self.skipToken = False
+                    # self.col += 1
+                    # self.currentIndex += 1
                     continue
 
                 if self.skipToken:
+                    # self.col += 1
+                    # self.currentIndex += 1
                     continue
+
                 return token
 
             if isinstance(token, LexicError):
@@ -308,7 +321,12 @@ class DFA():
                 self.lexeme += currentCharacter
                 return True
             
-            if currentCharacter in LIMITS:
+            if currentCharacter in NUMBERS:
+                self.state = 12
+                self.lexeme += currentCharacter
+                return True
+
+            if currentCharacter == " ":
                 self.state = 12
                 self.lexeme += currentCharacter
                 return True
@@ -320,12 +338,12 @@ class DFA():
             return error
         
         if self.state == 12:
-            if currentCharacter in LETTERS:
+            if currentCharacter == " ":
                 self.state = 12
                 self.lexeme += currentCharacter
                 return True
             
-            if currentCharacter in NUMBERS:
+            if currentCharacter in LETTERS or NUMBERS:
                 self.state = 12
                 self.lexeme += currentCharacter
                 return True
@@ -428,11 +446,11 @@ class DFA():
             self._resetAutomaton()
             return token
         if self.state == 13:
-            token = self._generateToken(TokenType.COMENTARIO_1LINEA)
+            token = self._generateToken(TokenType.ONE_ROW_COMMENT)
             self._resetAutomaton()
             return token
         if self.state == 17:
-            token = self._generateToken(TokenType.COMENTARIO_VARIAS_LINEAS)
+            token = self._generateToken(TokenType.CLOSE_MORE_ONE_ROW)
             self._resetAutomaton()
             return token
         if self.state == 18:

@@ -8,8 +8,9 @@ class TokenType(Enum):
     COMMA = auto()
     SEMICOLON = auto()
     STRING = auto()
-    COMENTARIO_1LINEA = auto()
-    COMENTARIO_VARIAS_LINEAS = auto()
+    ONE_ROW_COMMENT = auto()
+    OPEN_MORE_ONE_ROW = auto()
+    CLOSE_MORE_ONE_ROW = auto()
     JSON = auto()
     
 class Token():

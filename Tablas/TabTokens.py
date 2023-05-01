@@ -1,9 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 
-
 class TokenTable():
-
     def __init__(self, window):
         self.window = window
         self.window.title("Tabla de tokens")
@@ -25,10 +23,6 @@ class TokenTable():
         self.table.heading("Tipo", text="Tipo", anchor=CENTER)
 
     def loadData(self, data):
-
-        # data = [ { number: 'Lexico', row: 1, column: 1, lexema: 'a', type: 'b']
-
-        # Delete rows
         for row in self.table.get_children():
             self.table.delete(row)
 
