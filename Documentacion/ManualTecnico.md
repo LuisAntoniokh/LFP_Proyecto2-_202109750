@@ -6,17 +6,19 @@ Luis Antonio Castro Padilla
 
 # Tabla de tokens
 ```sh
-ID 
-EQUALS  
-PARENTHESIS_OPENING  
-PARENTHESIS_CLOSING  
-COMMA  
-SEMICOLON  
-STRING  
-ONE_ROW_COMMENT  
-OPEN_MORE_ONE_ROW  
-CLOSE_MORE_ONE_ROW  
-JSON  
+| Token | Representacion |
+| ------ | ------ |
+| ID  | L+ |
+| EQUALS | = |
+| PARENTHESIS_OPENING | ( |
+| PARENTHESIS_CLOSING | ) |
+| COMMA | , |
+| SEMICOLON | ; |
+| STRING | "L+" |
+| OPEN_MORE_ONE_ROW | --- |
+| OPEN_MORE_ONE_ROW | /* |
+| CLOSE_MORE_ONE_ROW | */ |
+| JSON | "{}" |
 ```
 
 # Método del árbol
